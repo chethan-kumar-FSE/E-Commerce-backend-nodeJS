@@ -6,7 +6,6 @@ const { generateToken } = require("../utils/token");
 
 const registerUser = async ({ userId, name, email, password, phno, age }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("hasedpasword", hashedPassword);
   const user = new User({
     userId,
     email,
