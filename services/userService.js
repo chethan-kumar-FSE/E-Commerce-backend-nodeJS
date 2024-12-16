@@ -28,7 +28,13 @@ const protect = async (req, res, next) => {
   if (!decoded) {
     return next(new HttpException(403, "Invalid token"));
   }
-  req.user = decoded;
+
+  const userId = decoded.userId;
+
+  if (req.user.userId !== userId) {
+    return next(new HttpException(401, "Token no longer belong to this user!"));
+  }
+
   next();
 };
 
@@ -63,6 +69,7 @@ const loginUser = async ({ email, password }, next) => {
   if (!isverifiedUser) {
     next(new HttpException(401, "Incorrect password"));
   }
+  req.user = decoded;
 
   const { userId, email: userEmail, phno, name } = user;
   const token = generateToken({ userId, email: userEmail, phno, name });
