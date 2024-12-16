@@ -2,7 +2,35 @@ const mongoose = require("mongoose");
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const HttpException = require("../Error/Exception");
-const { generateToken } = require("../utils/token");
+
+const generateToken = ({ userId, email, phno, name }) => {
+  return jwt.sign(
+    { user: { userId, email, phno, name } },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: "60d",
+    }
+  );
+};
+
+const protect = async (req, res, next) => {
+  const authHeader = req.headers["Authorization"];
+
+  const token = authHeader.split(" ")[1];
+
+  if (!token) {
+    return next(
+      new HttpException(401, "Not allowed to access to this resource !")
+    );
+  }
+  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+  if (!decoded) {
+    return next(new HttpException(403, "Invalid token"));
+  }
+  req.user = decoded;
+  next();
+};
 
 const registerUser = async ({ userId, name, email, password, phno, age }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,12 +59,13 @@ const loginUser = async ({ email, password }, next) => {
     next(new HttpException(404, "Email not found"));
   }
 
-  const unhashedPassword = await bcrypt.compare(password, user.password);
-  if (!unhashedPassword) {
+  const isverifiedUser = await User.verifyPassword(password, user.password);
+  if (!isverifiedUser) {
     next(new HttpException(401, "Incorrect password"));
   }
 
   const { userId, email: userEmail, phno, name } = user;
+  const token = generateToken({ userId, email: userEmail, phno, name });
   return {
     message: "User loggedIn successfully",
     data: {
@@ -44,9 +73,9 @@ const loginUser = async ({ email, password }, next) => {
       name,
       email,
       phno,
-      token: generateToken({ userId, email: userEmail, phno, name }),
+      token,
     },
   };
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, protect };

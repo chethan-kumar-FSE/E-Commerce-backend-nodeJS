@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcryptjs");
 const UserSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -7,6 +7,11 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     minlength: [6, "UserId must be exactly 6 characters length"],
     maxlength: [6, "UserId must be exactly 6 characters length"],
+  },
+  name: {
+    type: String,
+    required: true,
+    minlength: [3, "name must be atleast 3 characters length"],
   },
   email: {
     type: String,
@@ -21,11 +26,28 @@ const UserSchema = new mongoose.Schema({
       "Password must be at least 6 characters long, contain one uppercase letter and one digit.",
     ],
   },
-  name: {
+  confirmPassword: {
     type: String,
     required: true,
-    minlength: [3, "name must be atleast 3 characters length"],
+    validator: {
+      validate: function (value) {
+        if (this.password !== value) {
+          return false;
+        }
+      },
+      message: "Password didn't match",
+    },
   },
+  passwordChangedAt: {
+    type: Date,
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetExpires: {
+    type: Date,
+  },
+
   phno: {
     type: String,
     required: true,
@@ -47,6 +69,16 @@ const UserSchema = new mongoose.Schema({
 UserSchema.index({ email: 1 }, { unique: true });
 UserSchema.index({ phno: 1 }, { unique: true });
 UserSchema.index({ userId: 1 }, { unique: true });
+
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now();
+});
+
+UserSchema.methods.verifyPassword = async function (password) {
+  return bcrypt.compare(password);
+};
 
 const User = mongoose.model("Users", UserSchema);
 module.exports = User;
