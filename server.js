@@ -6,7 +6,7 @@ const Database = require("./config/db");
 
 const app = express();
 const userRouter = require("./routes/userRoutes");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 //mongoose connection
 Database.connect({
   username: process.env.MONGOOSE_USERNAME,

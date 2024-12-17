@@ -24,12 +24,8 @@ const handleErrors = (err, next) => {
     );
   }
 
-  /* if (err?.message) {
-    return next(new HttpException(err.statusCode, err.message));
-  }
- */
   // Handle generic errors
-  return next(new HttpException(500, "Internal server error"));
+  return next(new HttpException(err.errorCode, err.message));
 };
 
 module.exports = handleErrors;

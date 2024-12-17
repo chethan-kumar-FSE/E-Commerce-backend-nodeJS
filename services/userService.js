@@ -59,15 +59,16 @@ const registerUser = async ({ userId, name, email, password, phno, age }) => {
   };
 };
 
-const loginUser = async ({ email, password }, next) => {
+const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
+
   if (!user) {
-    next(new HttpException(404, "Email not found"));
+    new HttpException(404, "Email not found");
   }
 
   const isverifiedUser = await User.verifyPassword(password, user.password);
   if (!isverifiedUser) {
-    next(new HttpException(401, "Incorrect password"));
+    throw new HttpException(401, "Incorrect password");
   }
   req.user = decoded;
 
