@@ -85,4 +85,38 @@ const loginUser = async ({ email, password }, next) => {
   };
 };
 
-module.exports = { registerUser, loginUser, protect };
+const forgotPassword = async ({ email }) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new HttpException(404, "Incorrect Email");
+  }
+
+  const resetToken = await User.createPasswordResetToken();
+  await User.save({ validateBeforeSave: false });
+
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/user/resetpassword/${resetToken}`;
+  const message = `forgot your password? sbmit a patch request with your new password to ${resetUrl}`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "your password reset toekn",
+      message: message,
+    });
+    return {
+      status: "success",
+      message: "token was sent to mail",
+    };
+  } catch (err) {
+    User.passwordResetToken = undefined;
+    User.passwordResetExpires = undefined;
+    await User.save({ validateBeforeSave: false });
+
+    throw new HttpException(500, "there was an error sending mail");
+  }
+};
+
+module.exports = { registerUser, loginUser, protect, forgotPassword };
