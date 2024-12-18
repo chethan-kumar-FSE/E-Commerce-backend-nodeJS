@@ -5,6 +5,10 @@ const paymentSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   orderId: {
     type: String,
     unique: true,
@@ -20,7 +24,15 @@ const paymentSchema = new mongoose.Schema({
     required: true,
     enum: ["pending", "completed", "cancelled"],
   },
+  isPointsUsed: {
+    type: Boolean,
+    required: true,
+  },
   amount: {
+    amountReducedByPoints: {
+      type: Number,
+      required: true,
+    },
     actualCost: {
       type: Number,
       required: true,

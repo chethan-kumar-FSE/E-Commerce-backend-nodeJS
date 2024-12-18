@@ -14,10 +14,6 @@ const orderModel = new mongoose.Schema({
         type: String,
         required: true,
       },
-      productName: {
-        type: String,
-        required: true,
-      },
       quantity: {
         type: Number,
         required: true,

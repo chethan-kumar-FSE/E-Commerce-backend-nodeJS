@@ -9,6 +9,7 @@ const SalesSchema = new mongoose.Schema({
   totalQuantitySold: {
     type: Number,
     required: true,
+    default: 0,
   },
   actualPrice: {
     type: Number,
@@ -21,11 +22,13 @@ const SalesSchema = new mongoose.Schema({
   profit: {
     type: Number,
     required: true,
+    default: 0,
   },
   customers: [
     {
       type: String,
       required: true,
+      default: [],
     },
   ],
 });

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+
 const UserSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -28,7 +30,6 @@ const UserSchema = new mongoose.Schema({
   },
   confirmPassword: {
     type: String,
-    required: true,
     validator: {
       validate: function (value) {
         if (this.password !== value) {
@@ -64,6 +65,11 @@ const UserSchema = new mongoose.Schema({
       message: "user must be atleast 18 years old",
     },
   },
+  isActive: {
+    type: Boolean,
+    select: false,
+    default: true,
+  },
 });
 
 UserSchema.index({ email: 1 }, { unique: true });
@@ -76,8 +82,14 @@ UserSchema.pre("save", async function (next) {
   this.passwordChangedAt = Date.now();
 });
 
-UserSchema.methods.verifyPassword = async function (password) {
-  return bcrypt.compare(password);
+UserSchema.methods.passwordChangedAfter = async function (jwtTimeStamp) {
+  if (this.passwordChangedAt) {
+    return parseInt(this.passwordChangedAt.getTime() / 1000, 10) < jwtTimeStamp;
+  }
+};
+
+UserSchema.methods.verifyPassword = async function (password, hashedPassword) {
+  return bcrypt.compare(password, hashedPassword);
 };
 
 UserSchema.methods.createPasswordResetToken = async function () {
@@ -91,5 +103,6 @@ UserSchema.methods.createPasswordResetToken = async function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
+
 const User = mongoose.model("Users", UserSchema);
 module.exports = User;

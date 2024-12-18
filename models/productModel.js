@@ -51,6 +51,10 @@ const productModel = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  overAllRating: {
+    type: Number,
+    required: true,
+  },
 });
 const Products = mongoose.model("products", productModel);
 module.exports = Products;

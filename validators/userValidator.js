@@ -19,6 +19,7 @@ const registerUserValidator = [
     .withMessage("Password must contain atleast 1 number")
     .matches(/[A-Z]/)
     .withMessage("Password must contain atleast 1 capital"),
+  body("confirmPassword"),
   body("phno")
     .notEmpty()
     .withMessage("Phone no is required")
