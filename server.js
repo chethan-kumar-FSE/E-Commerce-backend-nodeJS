@@ -33,8 +33,8 @@ app.use("/api/v1", userRouter);
 
 app.use((err, req, res, next) => {
   console.log("errr", err);
-  const statusCode = err.errorCode || 500;
-  const message = err.message || "Internal Server Error";
+  const statusCode = err?.errorCode || 500;
+  const message = err?.message || "Internal Server Error";
   const errors = err?.errors;
 
   const responseBody = {

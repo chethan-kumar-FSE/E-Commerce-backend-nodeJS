@@ -160,24 +160,17 @@ const resetPasswordService = async ({
   if (password !== confirmPassword) {
     throw new HttpException(401, "Password doesnt match");
   }
-  // Update the user fields
   user.passwordResetExpires = undefined;
   user.passwordResetToken = undefined;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   user.password = hashedPassword;
-  //user.confirmPassword = confirmPassword;
 
-  console.log("user", user);
-
-  // Save the updated user document
   await user.save();
 
-  // Destructure the required fields
   const { userId, email, phno, name } = user;
 
-  // Generate a new token
   const token = generateToken({ userId, email, phno, name });
 
   return {

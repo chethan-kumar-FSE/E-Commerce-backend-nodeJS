@@ -82,6 +82,11 @@ UserSchema.pre("save", async function (next) {
   this.passwordChangedAt = Date.now();
 });
 
+UserSchema.pre(/^find/, async function (next) {
+  this.find({ active: { $ne: false } });
+  next();
+});
+
 UserSchema.methods.passwordChangedAfter = async function (jwtTimeStamp) {
   if (this.passwordChangedAt) {
     return parseInt(this.passwordChangedAt.getTime() / 1000, 10) < jwtTimeStamp;
