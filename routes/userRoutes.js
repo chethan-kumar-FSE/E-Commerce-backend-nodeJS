@@ -11,7 +11,6 @@ const {
   forgotPassword,
   resetPassword,
 } = require("../controllers/userController");
-const handleErrors = require("../Error/ErrorHandler");
 
 const router = express.Router();
 

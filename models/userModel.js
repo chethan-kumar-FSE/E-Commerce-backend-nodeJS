@@ -72,10 +72,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.index({ email: 1 }, { unique: true });
-UserSchema.index({ phno: 1 }, { unique: true });
-UserSchema.index({ userId: 1 }, { unique: true });
-
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 
@@ -110,4 +106,7 @@ UserSchema.methods.createPasswordResetToken = async function () {
 };
 
 const User = mongoose.model("Users", UserSchema);
+
+User.syncIndexes(); //syncing indexes
+
 module.exports = User;

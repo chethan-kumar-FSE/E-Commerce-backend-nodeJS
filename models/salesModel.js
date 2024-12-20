@@ -28,7 +28,10 @@ const SalesSchema = new mongoose.Schema({
     {
       type: String,
       required: true,
-      default: [],
+    },
+    {
+      type: Number,
+      required: true,
     },
   ],
 });
