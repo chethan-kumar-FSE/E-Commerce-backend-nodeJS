@@ -6,6 +6,7 @@ const Database = require("./config/db");
 
 const app = express();
 const userRouter = require("./routes/userRoutes");
+const productsRouter = require("./routes/productRoutes");
 const PORT = process.env.PORT || 3001;
 //mongoose connection
 Database.connect({
@@ -30,6 +31,7 @@ app.use(
 
 app.use(express.json());
 app.use("/api/v1", userRouter);
+app.use("/api/v1", productsRouter);
 
 app.use((err, req, res, next) => {
   console.log("errr", err);
