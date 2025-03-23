@@ -26,4 +26,27 @@ router.post("/products", async (req, res) => {
   });
 });
 
+router.post("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Products.findOne({
+      productId: id,
+    });
+    if (!product) {
+      return res.status(404).send({
+        message: "Product not found",
+        status: "failure",
+      });
+    }
+    return res.status(200).send({
+      status: "success",
+      data: product,
+    });
+  } catch (err) {
+    return res.status(500).send({
+      message: "something went wrong",
+    });
+  }
+});
+
 module.exports = router;
