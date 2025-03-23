@@ -42,7 +42,10 @@ router.post("/products/:id", async (req, res) => {
       ...product,
       fetchedAt: new Date().toDateString(),
       customPropeties: {},
+      a: 10,
+      sample: "property",
     };
+
     return res.status(200).send({
       status: "success",
       data: productClone,
