@@ -38,9 +38,14 @@ router.post("/products/:id", async (req, res) => {
         status: "failure",
       });
     }
+    const productClone = {
+      ...product,
+      fetchedAt: new Date().toDateString(),
+      customPropeties: {},
+    };
     return res.status(200).send({
       status: "success",
-      data: product,
+      data: productClone,
     });
   } catch (err) {
     return res.status(500).send({
