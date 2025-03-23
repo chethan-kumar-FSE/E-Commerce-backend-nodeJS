@@ -45,6 +45,9 @@ router.post("/products/:id", async (req, res) => {
       customPropeties: {},
       a: 10,
       sample: "property",
+      otherChanges: {
+        a: 10,
+      },
     };
 
     return res.status(200).send({
