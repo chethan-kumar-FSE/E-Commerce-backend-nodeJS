@@ -38,6 +38,7 @@ router.post("/products/:id", async (req, res) => {
         status: "failure",
       });
     }
+    const a = 10;
     const productClone = {
       ...product,
       fetchedAt: new Date().toDateString(),
