@@ -48,6 +48,7 @@ router.post("/products/:id", async (req, res) => {
       otherChanges: {
         a: 10,
       },
+      otherFeature: {},
     };
 
     return res.status(200).send({
