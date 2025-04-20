@@ -43,6 +43,7 @@ router.post("/products/:id", async (req, res) => {
       ...product,
       fetchedAt: new Date().toDateString(),
       customPropeties: {},
+      main: "main",
       a: 10,
       sample: "property",
       otherChanges: {
