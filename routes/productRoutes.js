@@ -42,6 +42,7 @@ router.post("/products/:id", async (req, res) => {
         status: "failure",
       });
     }
+    const newProp = 10;
     const a = 10;
     const productClone = {
       ...product,
