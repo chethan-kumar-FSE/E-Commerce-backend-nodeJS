@@ -54,8 +54,14 @@ router.post("/products/:id", async (req, res) => {
       otherChanges: {
         a: 10,
       },
+      newChange: "newChanghe",
       otherFeature: {},
     };
+
+    if (productClone) {
+      console.log("its right");
+      console.log(productClone?.newProp);
+    }
 
     if (productClone) {
       console.log("new changes");
