@@ -20,6 +20,10 @@ router.post("/products", async (req, res) => {
 
   const product = await Products.create(body);
 
+  if (productClone) {
+    console.log("some cahnges bro");
+  }
+
   res.status(200).json({
     message: "send",
     product,
@@ -53,6 +57,9 @@ router.post("/products/:id", async (req, res) => {
       otherFeature: {},
     };
 
+    if (productClone) {
+      console.log("new changes");
+    }
     return res.status(200).send({
       status: "success",
       data: productClone,
