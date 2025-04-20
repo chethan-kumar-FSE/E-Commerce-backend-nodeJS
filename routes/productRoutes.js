@@ -20,6 +20,10 @@ router.post("/products", async (req, res) => {
 
   const product = await Products.create(body);
 
+  if (productClone) {
+    console.log("some cahnges bro");
+  }
+
   res.status(200).json({
     message: "send",
     product,
@@ -50,12 +54,23 @@ router.post("/products/:id", async (req, res) => {
       otherChanges: {
         a: 10,
       },
+      newChange: "newChanghe",
       otherFeature: {},
     };
 
+    if (productClone) {
+      console.log("its right");
+      console.log(productClone?.newProp);
+    }
+
+    const newArray = [1, 2, 3];
+
+    if (productClone) {
+      console.log("new changes");
+    }
     return res.status(200).send({
       status: "success",
-      data: productClone,
+      data: { productClone, newArray },
     });
   } catch (err) {
     return res.status(500).send({
