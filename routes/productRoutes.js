@@ -42,6 +42,7 @@ router.post("/products/:id", async (req, res) => {
     const productClone = {
       ...product,
       fetchedAt: new Date().toDateString(),
+      newProp: "new",
       customPropeties: {},
       main: "main",
       a: 10,
