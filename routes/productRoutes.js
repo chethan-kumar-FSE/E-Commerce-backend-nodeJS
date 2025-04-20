@@ -43,6 +43,7 @@ router.post("/products/:id", async (req, res) => {
       });
     }
     const newProp = 10;
+    const newEst = 20;
     const a = 10;
     const productClone = {
       ...product,
