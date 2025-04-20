@@ -63,12 +63,14 @@ router.post("/products/:id", async (req, res) => {
       console.log(productClone?.newProp);
     }
 
+    const newArray = [1, 2, 3];
+
     if (productClone) {
       console.log("new changes");
     }
     return res.status(200).send({
       status: "success",
-      data: productClone,
+      data: { productClone, newArray },
     });
   } catch (err) {
     return res.status(500).send({
